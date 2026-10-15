@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+        content="박지수의 기록. 배우고, 경험하고, 좋아하는 것을 기록합니다.">
+  <meta name="theme-color" content="#f7f5f0">
+  <title>박지수 — 배움과 취향의 기록</title>
+
+  <style>
+    :root {
+      --background: #f7f5f0;
+      --surface: #eeede8;
+      --text: #303330;
+      --muted: #686c65;
+      --line: #dcded6;
+      --accent: #596951;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont,
+        "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic",
+        sans-serif;
+      font-size: 16px;
+      line-height: 1.85;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:focus-visible,
+    summary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 6px;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: -100px;
+      left: 20px;
+      padding: 8px 16px;
+      background: var(--text);
+      color: var(--background);
+      z-index: 10;
+    }
+
+    .skip-link:focus {
+      top: 10px;
+    }
+
+    .container {
+      width: min(100% - 64px, 1040px);
+      margin-inline: auto;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-inner {
+      min-height: 88px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .site-name {
+      font-family: "AppleMyungjo", "Batang", serif;
+      font-size: 23px;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 26px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    nav a {
+      padding-block: 8px;
+    }
+
+    nav a:hover {
+      color: var(--text);
+      text-decoration: underline;
+      text-underline-offset: 6px;
+    }
+
+    .hero {
+      padding: 104px 0 96px;
+    }
+
+    .eyebrow,
+    .category,
+    .section-number {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+    }
+
+    .eyebrow {
+      margin: 0 0 28px;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "AppleMyungjo", "Batang", serif;
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.65;
+      font-weight: 400;
+      letter-spacing: -2px;
+    }
+
+    .hero-description {
+      margin: 28px 0 0;
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .hero-description span {
+      display: block;
+    }
+
+    .current-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 38px;
+      color: var(--accent);
+      font-size: 12px;
+    }
+
+    .current-note::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .section {
+      padding: 56px 0 64px;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 34px;
+    }
+
+    .section-title-group {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+    }
+
+    h2 {
+      margin: 0;
+      font-family: "AppleMyungjo", "Batang", serif;
+      font-size: 27px;
+      font-weight: 400;
+      letter-spacing: -1px;
+    }
+
+    .section-caption {
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 56px;
+    }
+
+    .note {
+      padding: 27px 0 30px;
+      border-top: 1px solid var(--line);
+    }
+
+    .note:first-child,
+    .note:nth-child(2) {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .category {
+      margin: 0 0 11px;
+      letter-spacing: .5px;
+    }
+
+    h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      line-height: 1.6;
+      font-weight: 500;
+      letter-spacing: -.6px;
+    }
+
+    .note p:last-child,
+    .learning-card p:last-child {
+      margin: 0;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .interests {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+
+    .interest-feature {
+      padding-right: 24px;
+    }
+
+    .interest-feature p {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .small-records {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 22px;
+    }
+
+    .small-records span {
+      padding: 5px 10px;
+      background: var(--surface);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .interest-list {
+      margin: 0;
+    }
+
+    .interest-item {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .interest-item:first-child {
+      padding-top: 0;
+    }
+
+    .interest-item dt {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .interest-item dd {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .learning-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .learning-card {
+      padding: 28px 24px 30px;
+      background: var(--surface);
+    }
+
+    .learning-card .category {
+      margin-bottom: 20px;
+    }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 64px;
+    }
+
+    .about-name {
+      margin: 0 0 8px;
+      font-family: "AppleMyungjo", "Batang", serif;
+      font-size: 30px;
+      font-weight: 400;
+    }
+
+    .about-english {
+      margin: 0;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--muted);
+    }
+
+    .about-copy p {
+      margin: 0 0 18px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .about-copy p:last-child {
+      margin-bottom: 0;
+    }
+
+    details {
+      margin-top: 38px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    summary {
+      padding: 20px 0;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    summary:hover {
+      color: var(--accent);
+    }
+
+    .career-list {
+      list-style: none;
+      margin: 0;
+      padding: 0 0 12px;
+    }
+
+    .career-list li {
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 14px;
+      padding: 18px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .career-index {
+      padding-top: 3px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .career-list h3 {
+      margin-bottom: 5px;
+      font-size: 15px;
+    }
+
+    .career-list p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    footer {
+      padding: 32px 0 42px;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .footer-inner p {
+      margin: 0;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        width: calc(100% - 40px);
+      }
+
+      .header-inner {
+        min-height: 100px;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 8px;
+        padding-block: 16px;
+      }
+
+      nav {
+        gap: 8px 22px;
+        font-size: 12px;
+      }
+
+      .hero {
+        padding: 68px 0 64px;
+      }
+
+      h1 {
+        letter-spacing: -1.5px;
+      }
+
+      .hero-description span {
+        display: inline;
+      }
+
+      .section {
+        padding: 40px 0 46px;
+      }
+
+      .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 28px;
+      }
+
+      .section-caption {
+        padding-left: 32px;
+      }
+
+      .notes-grid,
+      .interests,
+      .learning-grid,
+      .about-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .notes-grid {
+        gap: 0;
+      }
+
+      .note:nth-child(2) {
+        border-top: 1px solid var(--line);
+        padding-top: 27px;
+      }
+
+      .interests {
+        gap: 32px;
+      }
+
+      .interest-feature {
+        padding-right: 0;
+      }
+
+      .learning-grid {
+        gap: 12px;
+      }
+
+      .about-layout {
+        gap: 26px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">본문으로 이동</a>
+
+  <header>
+    <div class="container header-inner">
+      <a class="site-name" href="#main" aria-label="박지수, 첫 화면">
+        박지수
+      </a>
+
+      <nav aria-label="주요 메뉴">
+        <a href="#recent">요즘</a>
+        <a href="#favorites">좋아하는 것</a>
+        <a href="#learning">배우는 중</a>
+        <a href="#about">소개</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+
+    <!-- 첫 화면 -->
+    <section class="hero" aria-labelledby="intro-title">
+      <p class="eyebrow">일상 · 취향 · 배움</p>
+
+      <h1 id="intro-title">
+        배우고, 경험하고,<br>
+        좋아하는 것을 기록합니다.
+      </h1>
+
+      <p class="hero-description">
+        <span>패션과 유통에서 시작해 이커머스를 기획하고 있습니다.</span>
+        <span>계절을 즐기고, 새로운 것을 배우며 남기고 싶은 순간을 모읍니다.</span>
+      </p>
+
+      <a class="current-note" href="#recent">
+        2026년 가을의 기록
+      </a>
+    </section>
+
+    <!-- 요즘: 기록이 쌓이면 개별 상세 페이지로 연결할 수 있습니다. -->
+    <section id="recent" class="section" aria-labelledby="recent-title">
+      <div class="section-heading">
+        <div class="section-title-group">
+          <span class="section-number">01</span>
+          <h2 id="recent-title">요즘</h2>
+        </div>
+        <p class="section-caption">최근의 관심과 남기고 싶은 순간</p>
+      </div>
+
+      <div class="notes-grid">
+        <article class="note">
+          <p class="category">계절 · 일상</p>
+          <h3>짧은 가을을 보내는 방법</h3>
+          <p>
+            한강에 가고, 야외에서 저녁을 먹고, 자전거를 탑니다.
+            짧아서 더 아쉬운 이 날씨를 틈틈이 즐기고 있습니다.
+          </p>
+        </article>
+
+        <article class="note">
+          <p class="category">여행 · 제주</p>
+          <h3>바다 앞에서 보낸 하루</h3>
+          <p>
+            바다를 바라보며 선베드에 하루 종일 누워 있었습니다.
+            별다른 일을 하지 않아도 좋은 시간이었습니다.
+          </p>
+        </article>
+
+        <article class="note">
+          <p class="category">전시 · 김창열미술관</p>
+          <h3>작품 너머의 이야기를 듣는 일</h3>
+          <p>
+            제주에서 김창열미술관에 다녀왔습니다.
+            도슨트의 설명으로 작가의 삶과 시대를 알고 나니,
+            작품이 조금 다르게 보였습니다.
+          </p>
+        </article>
+
+        <article class="note">
+          <p class="category">전시 · 이대원</p>
+          <h3>따뜻한 그림 앞에서</h3>
+          <p>
+            이대원 전시에서 그림의 따뜻함이 오래 남았습니다.
+            도슨트와 함께 작가의 삶과 작품의 배경을 들으며 보았습니다.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 좋아하는 것 -->
+    <section id="favorites" class="section"
+             aria-labelledby="favorites-title">
+      <div class="section-heading">
+        <div class="section-title-group">
+          <span class="section-number">02</span>
+          <h2 id="favorites-title">좋아하는 것</h2>
+        </div>
+        <p class="section-caption">오래 이어지는 취향</p>
+      </div>
+
+      <div class="interests">
+        <article class="interest-feature">
+          <p class="category">한강과 물</p>
+          <h3>가까이에서 만나는 계절</h3>
+          <p>
+            물과 자연, 계절의 변화를 느낄 수 있어 한강을 좋아합니다.
+            올해는 한강에서 열린 미니 철인 3종 행사에 참여하고,
+            한강 나이트워크에서 14km를 걸었습니다.
+            다음에는 한강버스를 타보고 싶습니다.
+          </p>
+
+          <div class="small-records" aria-label="한강에서의 경험">
+            <span>미니 철인 3종</span>
+            <span>나이트워크 14km</span>
+            <span>자전거</span>
+          </div>
+        </article>
+
+        <dl class="interest-list">
+          <div class="interest-item">
+            <dt>계절과 자연</dt>
+            <dd>
+              여름의 바다, 가을의 단풍, 캠핑과 야외에서 보내는 시간.
+            </dd>
+          </div>
+
+          <div class="interest-item">
+            <dt>음식</dt>
+            <dd>
+              제철 음식을 먹고, 날씨가 좋은 날에는 야외에서 저녁을 먹는 일.
+            </dd>
+          </div>
+
+          <div class="interest-item">
+            <dt>전시</dt>
+            <dd>
+              작가의 삶과 시대적 배경을 듣고 작품을 바라보는 시간.
+            </dd>
+          </div>
+
+          <div class="interest-item">
+            <dt>프리다이빙</dt>
+            <dd>
+              물을 좋아해 시작했습니다. AIDA 2 자격을 가지고 있습니다.
+            </dd>
+          </div>
+
+          <div class="interest-item">
+            <dt>취미는 과학</dt>
+            <dd>
+              재미있어서 보다 보면 새로운 것을 알게 되는 프로그램.
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- 배우는 중 -->
+    <section id="learning" class="section"
+             aria-labelledby="learning-title">
+      <div class="section-heading">
+        <div class="section-title-group">
+          <span class="section-number">03</span>
+          <h2 id="learning-title">배우는 중</h2>
+        </div>
+        <p class="section-caption">새롭게 익히고, 직접 해보는 일</p>
+      </div>
+
+      <div class="learning-grid">
+        <article class="learning-card">
+          <p class="category">움직임</p>
+          <h3>발레</h3>
+          <p>
+            몸은 아직 뻣뻣하지만,
+            새로운 움직임을 배우는 재미가 있습니다.
+          </p>
+        </article>
+
+        <article class="learning-card">
+          <p class="category">AI · 일과 배움</p>
+          <h3>AI와 일하기</h3>
+          <p>
+            시간과 노력을 아끼고, 할 수 있는 일을 넓히기 위해
+            AI를 배우고 있습니다. GitHub와 바이브 코딩도
+            직접 해보는 중입니다.
+          </p>
+        </article>
+
+        <article class="learning-card">
+          <p class="category">만드는 중 · 팀 프로젝트</p>
+          <h3>독서바리</h3>
+          <p>
+            함께 읽은 책과 나눈 이야기가 오래 남았으면 하는 마음.
+            기록과 일정 투표, AI 책 추천과 발제문으로
+            독서모임을 돕는 서비스를 팀원들과 만들고 있습니다.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 소개 -->
+    <section id="about" class="section" aria-labelledby="about-title">
+      <div class="section-heading">
+        <div class="section-title-group">
+          <span class="section-number">04</span>
+          <h2 id="about-title">소개</h2>
+        </div>
+      </div>
+
+      <div class="about-layout">
+        <div>
+          <p class="about-name">박지수</p>
+          <p class="about-english">JISU PARK</p>
+        </div>
+
+        <div class="about-copy">
+          <p>
+            2016년 신세계인터내셔날에 입사했습니다.
+            상품을 기획하고 고르는 일에서 출발해,
+            새로운 사업과 온라인 서비스를 만드는 일을 경험했습니다.
+          </p>
+          <p>
+            지금은 신세계백화점 온라인 추진단 통합 마케팅팀에서
+            이커머스를 기획하고 있습니다.
+            KAIST MBA에서 공부하며 관심과 시야를 넓혀가고 있습니다.
+          </p>
+          <p>
+            혼자 읽을 때보다 함께 이야기할 때 생각이 넓어지는 경험을 좋아합니다.
+            이곳에는 배우는 과정과 그때그때의 관심,
+            일상에서 좋아하는 것들을 짧게 남깁니다.
+          </p>
+        </div>
+      </div>
+
+      <details>
+        <summary>지나온 일 펼쳐보기</summary>
+
+        <ol class="career-list">
+          <li>
+            <span class="career-index">01</span>
+            <div>
+              <h3>국내 브랜드 기획 MD</h3>
+              <p>
+                옷을 좋아하는 마음으로 시작한 일.
+                상품을 기획하는 즐거움을 배웠습니다.
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <span class="career-index">02</span>
+            <div>
+              <h3>해외 브랜드 바이어</h3>
+              <p>
+                REISS와 HERNO를 담당하며
+                수입, 라이선스, 매장 운영과 영업을 경험했습니다.
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <span class="career-index">03</span>
+            <div>
+              <h3>병행수입 신사업</h3>
+              <p>
+                해외 거래처를 발굴하고 새로운 업무와 프로세스를 만들었습니다.
+                변화를 즐기는 제 모습을 발견한 시기입니다.
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <span class="career-index">04</span>
+            <div>
+              <h3>글로벌 이커머스</h3>
+              <p>
+                Shopify 기반 해외 사이트 구축을 진행했습니다.
+                개발자, 디자이너와 협업하며 소통과 일정 관리의 중요성을 배웠습니다.
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <span class="career-index">05</span>
+            <div>
+              <h3>이커머스 MD · 전략 기획</h3>
+              <p>
+                상품을 운영하는 경험에서
+                이커머스의 방향을 고민하는 일로 관심을 넓혔습니다.
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <span class="career-index">06</span>
+            <div>
+              <h3>신세계백화점 온라인 추진단</h3>
+              <p>
+                2026년 5월부터 새로운 환경에서,
+                더 넓은 시야로 이커머스의 방향을 고민하고 있습니다.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <p>박지수 · 배움과 취향의 기록</p>
+      <a href="#main">맨 위로 ↑</a>
+    </div>
+  </footer>
+</body>
+</html>
